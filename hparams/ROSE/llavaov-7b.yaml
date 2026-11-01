@@ -1,0 +1,33 @@
+alg_name: "FT"
+model_name: "llava"
+device: 0
+
+layers: [26]
+num_steps: 25
+batch_size: 1
+max_length: 2048
+lr: 5e-4
+weight_decay: 0
+kl_factor: 0
+norm_constraint: false
+# In our survey paper(https://arxiv.org/abs/2401.01286) 
+# "prompt_last" corresponds to the results of FT-L.
+# "target_new" corresponds to the results of FT-M.
+objective_optimization: "prompt_last"
+rewrite_module_tmp: "model.layers.{}.mlp.down_proj.weight"
+layer_module_tmp: "model.layers.{}"
+mlp_module_tmp: "model.layers.{}.mlp"
+attn_module_tmp: "model.layers.{}.self_attn"
+ln_f_module: "model.norm"
+lm_head_module: "lm_head"
+use_chat_template: True
+model_parallel: false
+test_gap: 1000
+target_modules: ["model.layers.26.mlp.down_proj"]
+
+coco_image: VLKEB/VLKEB_images/mmkb_images
+rephrase_image: VLKEB/VLKEB_images/mmkb_images
+tokenizer_class: AutoTokenizer
+tokenizer_name: ./hugging_cache/llava-1.5-7b-hf
+model_class: LLaVA
+name: hugging_cache/llava-1.5-7b-hf
